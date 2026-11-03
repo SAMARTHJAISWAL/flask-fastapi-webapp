@@ -1,1 +1,1 @@
-gunicorn server1:app --bind 127.0.0.1:8888
+flask --app server1 run --port 8888

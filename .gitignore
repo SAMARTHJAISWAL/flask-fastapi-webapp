@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+logs/
+.pytest_cache/
+.DS_Store
+.idea/
+.vscode/
+
+# Scraper output (data/2020.csv is kept as a sample)
+data/*.csv
+!data/2020.csv
