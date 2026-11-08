@@ -1,7 +1,15 @@
-import requests 
+"""Call a running server's scraper endpoint.
 
-ngrok_url = 'https://a5681caa.ngrok.io'
-endpoint = f'{ngrok_url}/box-office-mojo-scraper'
+Usage: python trigger.py [BASE_URL]   (default: $SCRAPER_URL or http://127.0.0.1:8888)
+"""
+import os
+import sys
 
-r = requests.post(endpoint, json={})
-print(r.json()['data'])
+import requests
+
+base_url = sys.argv[1] if len(sys.argv) > 1 else os.getenv("SCRAPER_URL", "http://127.0.0.1:8888")
+endpoint = f"{base_url.rstrip('/')}/box-office-mojo-scraper"
+
+r = requests.post(endpoint, json={}, timeout=120)
+r.raise_for_status()
+print(r.json())

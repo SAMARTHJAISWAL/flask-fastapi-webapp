@@ -1,25 +1,33 @@
-from flask import Flask
+"""Flask version of the scraper service."""
+from flask import Flask, jsonify, request
 
 from logger import trigger_log_save
 from scrape import run as scrape_runner
 
 app = Flask(__name__)
 
-# http://localhost:8000/
-@app.route("/", methods=['GET'])
+
+@app.route("/", methods=["GET"])
 def hello_world():
-    # run other code here.
     return "Hello, world. this is Flask"
 
-# http://localhost:8000/abc
-@app.route("/abc", methods=['GET'])
+
+@app.route("/abc", methods=["GET"])
 def abc_view():
-    # run other code here.
     return "Hello, world. this is abc"
 
-@app.route("/box-office-mojo-scraper", methods=['POST'])
+
+@app.route("/box-office-mojo-scraper", methods=["POST"])
 def box_office_scraper_view():
-    # run other code here.
+    """Scrape Box Office Mojo. Optional JSON body: {"start_year": 2020, "years_ago": 1}."""
+    body = request.get_json(silent=True) or {}
     trigger_log_save()
-    scrape_runner()
-    return {"data": [1,2,3]}
+    try:
+        result = scrape_runner(start_year=body.get("start_year"), years_ago=body.get("years_ago", 0))
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    return jsonify(result)
+
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8888, debug=True)
