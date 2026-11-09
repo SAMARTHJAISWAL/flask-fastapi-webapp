@@ -98,3 +98,7 @@ pytest
 ```
 
 The scraper depends on Box Office Mojo's page markup (`.imdb-scroll-table table`). If the site changes, `parse_table` will return nothing and the year is reported under `failed`.
+
+## Licence
+
+[MIT](LICENSE) © 2024–2026 Samarth Jaiswal
